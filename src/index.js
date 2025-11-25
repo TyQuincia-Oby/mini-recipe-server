@@ -6,6 +6,7 @@ import {randomUUID} from 'node:crypto';
 const app = express();
 const port = 3000; //set port
 
+// middleware
 app.use(express.static('public'));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 app.use(express.json());
 app.use(cors());
@@ -66,7 +67,9 @@ let recipeBook = [
 ]
 //home route - get all items (Return with status 200)
 app.get('/', (req, res) => {
-    res.send(`<img src="./public/recipebookcover.png>`);
+    res.send(`
+        <h1>5 Ingredient Recipes</h1>
+        `);
 });
 
 //  get all items (Return with status 200)
