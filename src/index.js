@@ -84,7 +84,7 @@ app.get('/recipes/:id', (req, res) => {
 
     if(!recipe){
         return res.status(404).json({
-            error: 'Item not found'
+            error: 'Recipe not found'
         })
     }
     //show recipe
@@ -110,7 +110,7 @@ app.post('/recipes', (req, res) => {
         res.status(400)
         return res.json({
             error: {
-                message: "No body in request"
+                message: "No recipe name in request"
             }
         })
     }
@@ -146,13 +146,13 @@ app.delete('/recipes/:id', (req, res) => {
     if(!recipe){
        return res.status(404)
         .json({
-            error: 'Item not found'
+            error: 'Recipe not found'
         })
     }
 
     recipeBook = recipeBook.filter((r) => r.id !== req.params.id);
     res.status(200).json({
-        message: 'Item deleted successfully',
+        message: 'Recipe deleted successfully',
         deletedItem: recipe
     })
 
