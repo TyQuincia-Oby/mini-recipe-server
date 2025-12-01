@@ -4,7 +4,7 @@ import cors from 'cors';
 import {randomUUID} from 'node:crypto';
 
 const app = express();
-const port = 3000; //set port
+const PORT = 3000; //set port
 
 // middleware
 app.use(express.static('public'));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
@@ -159,6 +159,6 @@ app.delete('/recipes/:id', (req, res) => {
 })
 
 // //listening on port 3000
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`)
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`)
 })
