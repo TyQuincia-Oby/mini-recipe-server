@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import {randomUUID} from 'node:crypto';
+import supabase from './supabase.js' //import connection
 
 const app = express();
 const PORT = 3000; //set port
