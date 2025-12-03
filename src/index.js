@@ -73,10 +73,32 @@ app.get('/', (req, res) => {
         `);
 });
 
+// // only with express storage
+// //  get all items (Return with status 200)
+// app.get('/recipes', (req, res) => {
+//     res.json(recipeBook);
+// })
+
+// get with supabase connection
 //  get all items (Return with status 200)
-app.get('/recipes', (req, res) => {
-    res.json(recipeBook);
-})
+app.get('/recipes', async (req, res) =>{
+    console.log("Hello from supabase")
+    //fetch data from table in supabase
+    const {data, error } = await supabase
+    .from('recipeBook') //table name
+    .select('*'); //select everything
+
+    //handle errors: if the database fails, return error code 500
+    if (error){
+        return res.status(500).json({
+            error : "error.message"
+        })
+    }
+
+    //return data with status code 200
+    res.json(data);
+
+});
 
 // get a recipe by id
 app.get('/recipes/:id', (req, res) => {
