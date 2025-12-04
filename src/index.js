@@ -97,89 +97,110 @@ app.get('/recipes', async (req, res) =>{
 
     //return data with status code 200
     res.json(data);
-
 });
 
 // get a recipe by id
-app.get('/recipes/:id', (req, res) => {
-    const recipe = recipeBook
-    .find((r) => r.id === req.params.id);
+// app.get('/recipes/:id', (req, res) => {
+//     const recipe = recipeBook
+//     .find((r) => r.id === req.params.id);
 
-    if(!recipe){
-        return res.status(404).json({
-            error: 'Recipe not found'
-        })
-    }
-    //show recipe
-    res.json(recipe);
+//     if(!recipe){
+//         return res.status(404).json({
+//             error: 'Recipe not found'
+//         })
+//     }
+//     //show recipe
+//     res.json(recipe);
 
-    console.log("Looking for ID: ", req.params.id)
-})
+//     console.log("Looking for ID: ", req.params.id)
+// })
 
-// create a new item (Return with status 201)
-app.post('/recipes', (req, res) => {
-    console.log(req.body)
+// create a new item (Return with status 201) just express
+// app.post('/recipes', (req, res) => {
+//     console.log(req.body)
 
-    if(req.body === undefined){
-        res.status(400)
-        return res.json({
-            error: {
-                message: "No body in request"
-            }
-        })
-    }
+//     if(req.body === undefined){
+//         res.status(400)
+//         return res.json({
+//             error: {
+//                 message: "No body in request"
+//             }
+//         })
+//     }
 
-    if(req.body.recipeName === undefined){
-        res.status(400)
-        return res.json({
-            error: {
-                message: "No recipe name in request"
-            }
-        })
-    }
+//     if(req.body.recipeName === undefined){
+//         res.status(400)
+//         return res.json({
+//             error: {
+//                 message: "No recipe name in request"
+//             }
+//         })
+//     }
 
-    console.log(req.body.recipeName);
-    console.log(req.body.ingredients);
-    console.log(req.body.directions);
+//     console.log(req.body.recipeName);
+//     console.log(req.body.ingredients);
+//     console.log(req.body.directions);
 
-    const newRecipe = {
-        id: randomUUID(),
-        recipeName: req.body.recipeName,
-        ingredients: req.body.ingredients,
-        directions: req.body.directions
-    }
+//     const newRecipe = {
+//         id: randomUUID(),
+//         recipeName: req.body.recipeName,
+//         ingredients: req.body.ingredients,
+//         directions: req.body.directions
+//     }
 
-    //visualize new recipe
-    console.log("Created:" , newRecipe)
-    //add new recipe to list
-    recipeBook.push(newRecipe);
+//     //visualize new recipe
+//     console.log("Created:" , newRecipe)
+//     //add new recipe to list
+//     recipeBook.push(newRecipe);
 
-    //new item returned with 201 status
-    res.status(201).json(newRecipe);
+//     //new item returned with 201 status
+//     res.status(201).json(newRecipe);
 
-    console.log('Post /recipes', newRecipe)
-})
-console.log('Seeded items', recipeBook)
+//     console.log('Post /recipes', newRecipe)
+// })
+// console.log('Seeded items', recipeBook)
+
+//post with supabase connection
+// app.post('/recipes', async (req, res) => {
+//     //things that should be in request body 
+//     const { recipeName, ingredients, directions} = req.body;
+
+//     //create new recipe
+//     const newRecipe = {
+//         recipeName,
+//         ingredients,
+//         directions
+//     };
+
+//     //update supabase with new recipe
+//     const {data} = await supabase //tell supabase
+//     .from('recipeBook') //update recipeBook
+//     .insert(newRecipe) //with new recipe
+//     .select() //view list
+//     .single();
+
+//     res.status(201).json(data)
+// })
 
 //delete a item (Return with )
-app.delete('/recipes/:id', (req, res) => {
-    const recipe = recipeBook
-    .find((r) => r.id === req.params.id);
+// app.delete('/recipes/:id', (req, res) => {
+//     const recipe = recipeBook
+//     .find((r) => r.id === req.params.id);
 
-    if(!recipe){
-       return res.status(404)
-        .json({
-            error: 'Recipe not found'
-        })
-    }
+//     if(!recipe){
+//        return res.status(404)
+//         .json({
+//             error: 'Recipe not found'
+//         })
+//     }
 
-    recipeBook = recipeBook.filter((r) => r.id !== req.params.id);
-    res.status(200).json({
-        message: 'Recipe deleted successfully',
-        deletedItem: recipe
-    })
+//     recipeBook = recipeBook.filter((r) => r.id !== req.params.id);
+//     res.status(200).json({
+//         message: 'Recipe deleted successfully',
+//         deletedItem: recipe
+//     })
 
-})
+// })
 
 // //listening on port 3000
 app.listen(PORT, () => {
