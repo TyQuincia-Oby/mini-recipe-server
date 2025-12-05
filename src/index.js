@@ -106,24 +106,26 @@ app.delete('/recipes/:id', async (req, res) => {
 
     res.status(200).json({Message : 'Recipe deleted successfully'})
 })
-// app.delete('/recipes/:id', (req, res) => {
-//     const recipe = recipeBook
-//     .find((r) => r.id === req.params.id);
 
-//     if(!recipe){
-//        return res.status(404)
-//         .json({
-//             error: 'Recipe not found'
-//         })
-//     }
+//update an existing resource 
+app.put('/recipes/:id', async (req, res) =>{
+    const id = req.params.id;
+    const { recipe_name, ingredients, directions} = req.body;
 
-//     recipeBook = recipeBook.filter((r) => r.id !== req.params.id);
-//     res.status(200).json({
-//         message: 'Recipe deleted successfully',
-//         deletedItem: recipe
-//     })
+    const updatedRecipe = {
+        recipe_name,
+        ingredients,
+        directions
+    };
 
-// })
+    const { data } = await supabase
+    .from('recipeBook')
+    .update(updatedRecipe)
+    .eq('id', id)
+    .select();
+
+    res.json(data[0]);
+});
 
 // //listening on port 3000
 app.listen(PORT, () => {
