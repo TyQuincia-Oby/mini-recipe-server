@@ -84,7 +84,9 @@ app.post('/recipes', async (req, res) => {
     if (error){
         console.log(error);
         return res.status(500).
-        json({error: error.message})
+        json({
+            error: error.message
+        })
     }
     res.status(201).json(data)
 })
@@ -101,7 +103,9 @@ app.delete('/recipes/:id', async (req, res) => {
     if (error){
         console.log(error);
         return res.status(500).
-        json({error: error.message})
+        json({
+            error: error.message
+        })
     }
 
     res.status(200).json({Message : 'Recipe deleted successfully'})
@@ -118,11 +122,19 @@ app.put('/recipes/:id', async (req, res) =>{
         directions
     };
 
-    const { data } = await supabase
+    const { data, error } = await supabase
     .from('recipeBook')
     .update(updatedRecipe)
     .eq('id', id)
     .select();
+
+    if (error){
+        console.log(error);
+        return res.status(500).
+        json({
+            error: error.message
+        })
+    }
 
     res.json(data[0]);
 });
