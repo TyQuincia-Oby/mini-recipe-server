@@ -24,7 +24,6 @@ app.get('/', (req, res) => {
 // get with supabase connection
 //  get all items (Return with status 200)
 app.get('/recipes', async (req, res) =>{
-    console.log("Hello from supabase")
     //fetch data from table in supabase
     const {data, error } = await supabase
     .from('recipeBook') //table name
@@ -41,74 +40,32 @@ app.get('/recipes', async (req, res) =>{
     res.json(data);
 });
 
-// get a recipe by id
-// app.get('/recipes/:id', (req, res) => {
-//     const recipe = recipeBook
-//     .find((r) => r.id === req.params.id);
+// get a recipe by id - supabase
+app.get('/recipes/:id', async (req, res) => {
+    //fetch data from table in supabase
+    const { data, error } = await supabase
+    .from('recipeBook') //table name
+    .select('*') //select everything
+    .eq('id', req.params.id) //filter id for selected id
+    .single(); //show that one recipe by id
 
-//     if(!recipe){
-//         return res.status(404).json({
-//             error: 'Recipe not found'
-//         })
-//     }
-//     //show recipe
-//     res.json(recipe);
+     //handle errors: if the database fails, return error code 500
+    if (error){
+        return res.status(500).json({
+            error : "error.message"
+        })
+    }
 
-//     console.log("Looking for ID: ", req.params.id)
-// })
+    //return data with status code 200
+    res.json(data);
 
-// create a new item (Return with status 201) just express
-// app.post('/recipes', (req, res) => {
-//     console.log(req.body)
+})
 
-//     if(req.body === undefined){
-//         res.status(400)
-//         return res.json({
-//             error: {
-//                 message: "No body in request"
-//             }
-//         })
-//     }
-
-//     if(req.body.recipeName === undefined){
-//         res.status(400)
-//         return res.json({
-//             error: {
-//                 message: "No recipe name in request"
-//             }
-//         })
-//     }
-
-//     console.log(req.body.recipeName);
-//     console.log(req.body.ingredients);
-//     console.log(req.body.directions);
-
-//     const newRecipe = {
-//         id: randomUUID(),
-//         recipeName: req.body.recipeName,
-//         ingredients: req.body.ingredients,
-//         directions: req.body.directions
-//     }
-
-//     //visualize new recipe
-//     console.log("Created:" , newRecipe)
-//     //add new recipe to list
-//     recipeBook.push(newRecipe);
-
-//     //new item returned with 201 status
-//     res.status(201).json(newRecipe);
-
-//     console.log('Post /recipes', newRecipe)
-// })
-// console.log('Seeded items', recipeBook)
 
 // post with supabase connection
 app.post('/recipes', async (req, res) => {
-    console.log("Hello from post")
     //things that should be in request body 
     const { recipe_name, ingredients, directions} = req.body;
-
-    console.log("Request body:" , req.body)
 
     //create new recipe
     const newRecipe = {
@@ -129,7 +86,6 @@ app.post('/recipes', async (req, res) => {
         return res.status(500).
         json({error: error.message})
     }
-    console.log(newRecipe)
     res.status(201).json(data)
 })
 
