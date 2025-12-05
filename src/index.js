@@ -89,7 +89,23 @@ app.post('/recipes', async (req, res) => {
     res.status(201).json(data)
 })
 
-//delete a item (Return with )
+//delete a item (Return with 200)
+app.delete('/recipes/:id', async (req, res) => {
+    const { id, error } = req.params.id;
+    
+    await supabase
+    .from('recipeBook')
+    .delete()
+    .eq('id', id )
+
+    if (error){
+        console.log(error);
+        return res.status(500).
+        json({error: error.message})
+    }
+
+    res.status(200).json({Message : 'Recipe deleted successfully'})
+})
 // app.delete('/recipes/:id', (req, res) => {
 //     const recipe = recipeBook
 //     .find((r) => r.id === req.params.id);
