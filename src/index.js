@@ -1,3 +1,4 @@
+console.log("Starting server...")
 // main source file server - src/index.js
 import express from 'express';
 import cors from 'cors';
@@ -12,60 +13,6 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(cors());
 
-
-//seeded data
-let recipeBook = [
-    {id: randomUUID(),
-        recipeName: "Honey Garlic Chicken", 
-        ingredients: ["chicken thighs or breasts", "honey", "soy sauce", "minced garlic", "olive oil"],
-        directions: "Sear chicken in olive oil. Mix honey, soy sauce and garlic, pour over, simmer 10-12 minutes until sticky." 
-    },
-    {id: randomUUID(),
-        recipeName: "Lemon Butter Pasta",
-        ingredients: ["pasta", "butter", "lemon (juice + zest)", "parmesan"],
-        directions: "Cook pasta, melt butter, add lemon, toss everything with parmesan."
-    },
-    {id: randomUUID(),
-        recipeName: "Salsa Chicken",
-        ingredients: ["chicken breast", "jar of salsa", "cheese(optional)"],
-        directions: "Bake chicken with salsa poured on top (375° for ~25 min. Add cheese last 5 minutes."
-    },
-    {id: randomUUID(),
-        recipeName: "Garlic Butter Shrimp",
-        ingredients: ["shrimp", "butter", "garlic", "lemon"],
-        directions: "Saute garlic in butter, add shrimp, cook 2-3 minutes, squeeze lemon."
-    },
-    {id: randomUUID(),
-        recipeName: "Avocado Toast",
-        ingredients: ["Bread", "avocado", "salt", "red pepper flakes"],
-        directions: "Toast bread, mash avocado, spread it, season."
-    },
-    {id: randomUUID(),
-        recipeName: "Sausage & Peppers Skillet",
-        ingredients: ["Smoked sausage", "bell peppers", "onion"],
-        directions: "Slice everything and saute until browned."
-    },
-    {id: randomUUID(),
-        recipeName: "Egg Fried Rice",
-        ingredients: ["Cooked rice", "Eggs", "soy sauce", "green onion"],
-        directions: "Scramble eggs, add rice, soy sauce and green onion"
-    },
-    {id: randomUUID(),
-        recipeName: "Baked Salmon",
-        ingredients: ["Salmon", "lemon", "olive oil", "salt & pepper"],
-        directions: "Season salmon, drizzle oil and lemon, bake 400° for 10-14 minutes"
-    },
-    {id: randomUUID(),
-        recipeName: "Peanut Butter Banana Smoothie",
-        ingredients: ["Banana", "peanut butter", "Milk (Oatmilk optional)", "ice"],
-        directions: "Blend everything" 
-    },
-    {id: randomUUID(),
-        recipeName: "Chocolate Mug Cake",
-        ingredients: ["flour", "sugar", "cocoa powder", "milk", "oil"],
-        directions: "Mix in a mug, microwave 1 minute."
-    }
-]
 //home route - get all items (Return with status 200)
 app.get('/', (req, res) => {
     res.send(`
@@ -73,11 +20,6 @@ app.get('/', (req, res) => {
         `);
 });
 
-// // only with express storage
-// //  get all items (Return with status 200)
-// app.get('/recipes', (req, res) => {
-//     res.json(recipeBook);
-// })
 
 // get with supabase connection
 //  get all items (Return with status 200)
@@ -160,27 +102,36 @@ app.get('/recipes', async (req, res) =>{
 // })
 // console.log('Seeded items', recipeBook)
 
-//post with supabase connection
-// app.post('/recipes', async (req, res) => {
-//     //things that should be in request body 
-//     const { recipeName, ingredients, directions} = req.body;
+// post with supabase connection
+app.post('/recipes', async (req, res) => {
+    console.log("Hello from post")
+    //things that should be in request body 
+    const { recipe_name, ingredients, directions} = req.body;
 
-//     //create new recipe
-//     const newRecipe = {
-//         recipeName,
-//         ingredients,
-//         directions
-//     };
+    console.log("Request body:" , req.body)
 
-//     //update supabase with new recipe
-//     const {data} = await supabase //tell supabase
-//     .from('recipeBook') //update recipeBook
-//     .insert(newRecipe) //with new recipe
-//     .select() //view list
-//     .single();
+    //create new recipe
+    const newRecipe = {
+        recipe_name,
+        ingredients,
+        directions
+    };
 
-//     res.status(201).json(data)
-// })
+    //update supabase with new recipe
+    const {data, error} = await supabase //tell supabase
+    .from('recipeBook') //update recipeBook
+    .insert(newRecipe) //with new recipe
+    .select() //view list
+    .single();//returns one item
+
+    if (error){
+        console.log(error);
+        return res.status(500).
+        json({error: error.message})
+    }
+    console.log(newRecipe)
+    res.status(201).json(data)
+})
 
 //delete a item (Return with )
 // app.delete('/recipes/:id', (req, res) => {
